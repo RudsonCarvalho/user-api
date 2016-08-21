@@ -1,0 +1,66 @@
+swagger: '2.0'
+info:
+  title: User API
+  description: Consulta de usuarios
+  version: 1.0.0
+host: localhost:8080
+basePath: /user-consult/v1
+schemes:
+  - http
+  - https
+definitions:
+  User:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      nome:
+        type: string
+      email:
+        type: string
+      data-cadastro:
+        type: string
+        format: date
+      data-atualizacao:
+        type: string
+        format: date
+  ErrorModel:
+    type: object
+    required:
+    - message
+    - code
+    properties:
+      message:
+        type: string
+      code:
+        type: integer
+        minimum: 100
+        maximum: 600
+parameters:
+  user-id:
+    name: id
+    in: path
+    description: id do usuario
+    type: integer
+    format: int64
+    required: true
+paths:
+  /usuarios/{id}:
+    get:
+      summary: Consulta de usuario
+      produces: 
+        - application/json
+      parameters:
+        - $ref: '#/parameters/user-id'
+      responses:
+        '200': 
+            description: 'Usuario que sera retornado'
+            schema:
+                  type: object
+                  items:
+                    - $ref: '#/definitions/User'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/ErrorModel'
